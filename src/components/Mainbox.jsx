@@ -4,7 +4,9 @@ const Mainbox = () => {
   const [BMIvalue, setBMIvalue] = useState(null);
   const [height, setheight] = useState("");
   const [weight, setweight] = useState("");
-  const [error, setError] = useState(""); // 🆕 added for error UI
+  const [error, setError] = useState(""); // for error UI
+  const [tag, setTag] = useState(""); // for BMI category tag
+  const [tagColor, setTagColor] = useState("text-white"); // for tag color
 
   const bmiCalculation = () => {
     const h = parseFloat(height);
@@ -14,7 +16,7 @@ const Mainbox = () => {
       setError("Please enter valid weight and height greater than 0.");
       setBMIvalue(null);
 
-      // 🕒 Auto-clear error after 3 seconds
+      // Auto-clear error after 3 seconds
       setTimeout(() => {
         setError("");
       }, 3000);
@@ -24,11 +26,27 @@ const Mainbox = () => {
 
     const bmi = w / (h * h);
     setBMIvalue(bmi.toFixed(2));
+
+    if (bmi < 18.5) {
+      setTag("Underweight 😟");
+      setTagColor("text-blue-400");
+    } else if (bmi >= 18.5 && bmi < 25) {
+      setTag("Normalweight ✅");
+      setTagColor("text-green-500");
+    } else if (bmi >= 25 && bmi < 30) {
+      setTag("Overweight ⚠️");
+      setTagColor("text-yellow-400");
+    } else {
+      setTag("Obese 🚨");
+      setTagColor("text-red-500");
+    }
+
     setError(""); // Clear any previous error
   };
 
   return (
     <div className="h-96 w-80 border-2 border-white bg-black shadow-xl shadow-gray-700 transform transition-transform duration-300 ease-in-out hover:scale-105 rounded-2xl p-6 flex flex-col justify-center gap-4 text-white">
+      
       {/* Weight Input */}
       <div>
         <label className="block text-sm mb-1">Weight (kg)</label>
@@ -56,7 +74,7 @@ const Mainbox = () => {
       {/* Submit Button */}
       <button
         className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
-        onClick={bmiCalculation} // ✅ fixed the wrong arrow function
+        onClick={bmiCalculation}
       >
         Submit
       </button>
@@ -68,7 +86,9 @@ const Mainbox = () => {
           setweight("");
           setheight("");
           setBMIvalue(null);
-          setError(""); // ✅ clear error too
+          setTag("");
+          setTagColor("text-white");
+          setError("");
         }}
       >
         Reset
@@ -80,9 +100,15 @@ const Mainbox = () => {
           <div className="text-red-500 text-sm text-center">{error}</div>
         )}
       </div>
+
       {/* BMI Result */}
       <div className="h-10">
-        {BMIvalue && <div className="pl-16">Your BMI is {BMIvalue}</div>}
+        {BMIvalue && (
+          <div className="font-normal text-center animate-fade-in">
+            Your BMI is {BMIvalue}{" "}
+            <span className={`font-semibold ${tagColor}`}>({tag})</span>
+          </div>
+        )}
       </div>
     </div>
   );
