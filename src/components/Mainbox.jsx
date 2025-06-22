@@ -1,36 +1,86 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
+
 const Mainbox = () => {
-  const [BMIvalue, setBMIvalue] = useState('---');
+  const [BMIvalue, setBMIvalue] = useState(null);
+  const [height, setheight] = useState("");
+  const [weight, setweight] = useState("");
+  const [error, setError] = useState(""); // 🆕 added for error UI
+
+  const bmiCalculation = () => {
+    const h = parseFloat(height);
+    const w = parseFloat(weight);
+
+    if (!w || !h || w <= 0 || h <= 0) {
+      setError("Please enter valid weight and height greater than 0.");
+      setBMIvalue(null);
+
+      // 🕒 Auto-clear error after 3 seconds
+      setTimeout(() => {
+        setError("");
+      }, 3000);
+
+      return;
+    }
+
+    const bmi = w / (h * h);
+    setBMIvalue(bmi.toFixed(2));
+    setError(""); // Clear any previous error
+  };
+
   return (
     <div className="h-96 w-80 border-2 border-white bg-black shadow-xl shadow-gray-700 transform transition-transform duration-300 ease-in-out hover:scale-105 rounded-2xl p-6 flex flex-col justify-center gap-4 text-white">
       {/* Weight Input */}
       <div>
-        <label className="block text-sm mb-1">Weight (lbs)</label>
+        <label className="block text-sm mb-1">Weight (kg)</label>
         <input
           type="number"
           placeholder="Enter Weight value"
+          value={weight}
+          onChange={(e) => setweight(e.target.value)}
           className="bg-purple-200 w-full px-3 py-2 rounded border border-gray-300 text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
 
       {/* Height Input */}
       <div>
-        <label className="block text-sm mb-1">Height (in)</label>
+        <label className="block text-sm mb-1">Height (m)</label>
         <input
           type="number"
           placeholder="Enter height value"
+          value={height}
+          onChange={(e) => setheight(e.target.value)}
           className="bg-purple-200 w-full px-3 py-2 rounded border border-gray-300 text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
 
-      {/* Buttons */}
-      <button className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">
+      {/* Submit Button */}
+      <button
+        className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+        onClick={bmiCalculation} // ✅ fixed the wrong arrow function
+      >
         Submit
       </button>
-      <button className="bg-gray-200 text-black py-2 rounded hover:bg-gray-300 transition">
-        Reload
+
+      {/* Reset Button */}
+      <button
+        className="bg-gray-200 text-black py-2 rounded hover:bg-gray-300 transition"
+        onClick={() => {
+          setweight("");
+          setheight("");
+          setBMIvalue(null);
+          setError(""); // ✅ clear error too
+        }}
+      >
+        Reset
       </button>
+
+      {/* Error Message */}
+      <div className="h-10">
+        {error && (
+          <div className="text-red-500 text-sm text-center">{error}</div>
+        )}
+      </div>
+      {/* BMI Result */}
       <div className="h-10">
         {BMIvalue && <div className="pl-16">Your BMI is {BMIvalue}</div>}
       </div>
