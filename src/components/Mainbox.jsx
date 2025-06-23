@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import { FaArrowsAltV } from "react-icons/fa";
 const Mainbox = () => {
   const [BMIvalue, setBMIvalue] = useState(null);
   const [height, setheight] = useState("");
@@ -45,11 +45,11 @@ const Mainbox = () => {
   };
 
   return (
-    <div className="h-96 w-80 border-2 border-white bg-black shadow-xl shadow-gray-700 transform transition-transform duration-300 ease-in-out hover:scale-105 rounded-2xl p-6 flex flex-col justify-center gap-4 text-white">
+    <div className="h-96 w-80 border-2 border-white bg-black shadow-xl shadow-gray-700 transform transition-transform duration-1000 ease-in-out hover:scale-105 rounded-2xl p-6 flex flex-col justify-center gap-4 text-white">
       
       {/* Weight Input */}
       <div>
-        <label className="block text-sm mb-1">Weight (kg)</label>
+        <label className="block text-sm mb-2 animate-bounce">Weight (kg)</label>
         <input
           type="number"
           placeholder="Enter Weight value"
@@ -61,7 +61,10 @@ const Mainbox = () => {
 
       {/* Height Input */}
       <div>
-        <label className="block text-sm mb-1">Height (m)</label>
+        <div className="flex">
+        <label className="block text-sm mb-2 animate-bounce">Height (m)</label>
+        <FaArrowsAltV className="animate-bounce"/>
+        </div>
         <input
           type="number"
           placeholder="Enter height value"
@@ -73,7 +76,7 @@ const Mainbox = () => {
 
       {/* Submit Button */}
       <button
-        className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+        className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition transform duration-1000 ease-in-out hover:scale-105"
         onClick={bmiCalculation}
       >
         Submit
@@ -81,7 +84,7 @@ const Mainbox = () => {
 
       {/* Reset Button */}
       <button
-        className="bg-gray-200 text-black py-2 rounded hover:bg-gray-300 transition"
+        className="bg-gray-200 text-black py-2 rounded hover:bg-gray-300 transition transform duration-1000 ease-in-out hover:scale-105"
         onClick={() => {
           setweight("");
           setheight("");
@@ -95,14 +98,14 @@ const Mainbox = () => {
       </button>
 
       {/* Error Message */}
-      <div className="h-10">
+      <div className="h-16">
         {error && (
           <div className="text-red-500 text-sm text-center">{error}</div>
         )}
       </div>
 
       {/* BMI Result */}
-      <div className="h-10">
+      <div className="h-16">
         {BMIvalue && (
           <div className="font-normal text-center animate-fade-in">
             Your BMI is {BMIvalue}{" "}
